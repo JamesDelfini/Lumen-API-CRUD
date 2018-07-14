@@ -18,3 +18,13 @@ $router->get('/', function () use ($router) {
 $router->get('key', function(){
     return strtoupper(str_random(60));
 });
+
+$router->group(['prefix' => 'api'], function() use ($router){
+    $router->group(['prefix' => 'users'], function() use ($router){
+      $router->get('/', 'UsersController@index');
+      $router->get('/show/{id}', 'UsersController@show');
+      $router->post('add', 'UsersController@store');
+      $router->put('update/{id}', 'UsersController@update');
+      $router->delete('delete/{id}', 'UsersController@delete');
+    });
+});
