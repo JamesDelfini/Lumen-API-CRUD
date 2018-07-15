@@ -33,6 +33,24 @@ class UsersController extends Controller{
         return response()->json($response);
     }
 
+    public function login(Request $request){
+        $user = User::where('username', $request['username'])->first();
+        if($user){
+            If(Hash::check($request['password'], $user->password)){
+                $response['error'] = false;
+                $response['message'] = "Login Successfully!";
+            }else{
+                $response['error'] = true;
+                $response['message'] = "Username and password does not match";
+            }
+        }else{
+            $response['error'] = true;
+            $response['message'] = 'Account is not registered';
+        }
+
+        return response()->json($response);
+    }
+
     public function store(Request $request){
         $request['api_token'] = strtoupper(str_random(60));
         $request['password'] = Hash::make($request['password']);
